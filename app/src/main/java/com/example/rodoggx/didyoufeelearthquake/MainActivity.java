@@ -1,5 +1,6 @@
 package com.example.rodoggx.didyoufeelearthquake;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -13,11 +14,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Perform the HTTP request for earthquake data and process the response.
-        Event earthquake = Utils.getEarthquakeData(USGS_URL);
-        // Update the information displayed to the user.
-        updateUi(earthquake);
-    }
+       EarthquakeAsyncTask task = new EarthquakeAsyncTask();
+        task.execute(USGS_URL);
+           }
 
     private void updateUi(Event earthquake) {
         TextView titleView = (TextView) findViewById(R.id.title);
@@ -28,5 +27,18 @@ public class MainActivity extends AppCompatActivity {
 
         TextView perceivedStrengthView = (TextView) findViewById(R.id.perceived_magnitude);
         perceivedStrengthView.setText(earthquake.perceivedStrength);
+    }
+
+    private class EarthquakeAsyncTask extends AsyncTask<String, Void, Event> {
+        @Override
+        protected Event doInBackground(String... urls) {
+            Event earthquake = Utils.getEarthquakeData(urls[0]);
+            return earthquake;
+        }
+
+        @Override
+        protected void onPostExecute(Event earthquake) {
+            updateUi(earthquake);
+        }
     }
 }
