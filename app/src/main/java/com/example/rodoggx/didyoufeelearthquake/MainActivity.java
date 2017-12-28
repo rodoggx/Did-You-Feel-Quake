@@ -13,8 +13,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Perform the HTTP request for earthquake data and process the response.
         Event earthquake = Utils.getEarthquakeData(USGS_URL);
-        
+        // Update the information displayed to the user.
         updateUi(earthquake);
     }
 
