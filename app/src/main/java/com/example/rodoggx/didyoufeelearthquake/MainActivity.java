@@ -32,12 +32,18 @@ public class MainActivity extends AppCompatActivity {
     private class EarthquakeAsyncTask extends AsyncTask<String, Void, Event> {
         @Override
         protected Event doInBackground(String... urls) {
+            if (urls.length < 1 || urls[0] == null) {
+                return null;
+            }
             Event earthquake = Utils.getEarthquakeData(urls[0]);
             return earthquake;
         }
 
         @Override
         protected void onPostExecute(Event earthquake) {
+            if (earthquake == null) {
+                return;
+            }
             updateUi(earthquake);
         }
     }
